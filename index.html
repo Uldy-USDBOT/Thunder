@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thunder.ly — Coming Soon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --deep-void: #020408;
+    --storm-navy: #040d1a;
+    --cloud-dark: #071428;
+    --cloud-mid: #0b1f3f;
+    --cloud-edge: #102850;
+    --bolt-gold: #e8c84a;
+    --bolt-white: #f0f4ff;
+    --bolt-cyan: #4af0ff;
+    --electric-blue: #1a6fff;
+    --pulse-blue: #2a8fff;
+    --text-dim: #6a8aaa;
+    --text-mist: #c0d0e0;
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow-x: hidden;
+    background: var(--deep-void);
+  }
+
+  body {
+    font-family: 'Rajdhani', sans-serif;
+    color: var(--text-mist);
+    cursor: crosshair;
+  }
+
+  /* ── CANVAS ── */
+  #storm-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ── SCENE ── */
+  .scene {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    width: 100%;
+    max-width: 1100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 32px 0;
+  }
+
+  .logo-mark {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    color: var(--bolt-gold);
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+
+  .nav-tag {
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    border: 1px solid rgba(74, 240, 255, 0.18);
+    padding: 6px 16px;
+    border-radius: 2px;
+    background: rgba(26, 111, 255, 0.06);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px 0 40px;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .hero-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    color: var(--bolt-cyan);
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    opacity: 0.7;
+    animation: fadeSlideDown 1.2s ease forwards;
+    opacity: 0;
+    animation-delay: 0.3s;
+  }
+
+  /* ── SVG TREE SCENE ── */
+  .tree-scene {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 30px;
+    animation: fadeIn 2s ease forwards;
+    opacity: 0;
+    animation-delay: 0.5s;
+  }
+
+  .tree-scene svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* ── MAIN TITLE ── */
+  .hero-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(52px, 10vw, 110px);
+    font-weight: 900;
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    color: var(--bolt-white);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    animation: fadeSlideUp 1.4s ease forwards;
+    opacity: 0;
+    animation-delay: 0.8s;
+  }
+
+  .hero-title .thunder {
+    display: block;
+    background: linear-gradient(180deg, #ffffff 0%, #b8d4ff 40%, #4a8fff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 40px rgba(74, 144, 255, 0.5));
+  }
+
+  .hero-title .dot-ly {
+    display: inline;
+    background: linear-gradient(180deg, #e8c84a 0%, #f0a020 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 30px rgba(232, 200, 74, 0.6));
+    font-size: 0.55em;
+    vertical-align: super;
+  }
+
+  .hero-subtitle {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(13px, 2vw, 17px);
+    font-weight: 300;
+    letter-spacing: 0.35em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-top: 28px;
+    line-height: 2;
+    max-width: 560px;
+    animation: fadeSlideUp 1.6s ease forwards;
+    opacity: 0;
+    animation-delay: 1.1s;
+  }
+
+  .hero-subtitle em {
+    color: var(--bolt-cyan);
+    font-style: normal;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    width: 200px;
+    height: 1px;
+    margin: 36px auto;
+    background: linear-gradient(90deg, transparent, rgba(74, 240, 255, 0.4), rgba(232, 200, 74, 0.4), transparent);
+    animation: fadeIn 2s ease forwards;
+    opacity: 0;
+    animation-delay: 1.4s;
+  }
+
+  /* ── COUNTDOWN ── */
+  .countdown-wrapper {
+    animation: fadeSlideUp 1.8s ease forwards;
+    opacity: 0;
+    animation-delay: 1.3s;
+  }
+
+  .countdown-label {
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+
+  .countdown {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .count-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .count-num {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 700;
+    color: var(--bolt-white);
+    line-height: 1;
+    min-width: 2.2ch;
+    text-align: center;
+    text-shadow: 0 0 30px rgba(74, 144, 255, 0.6);
+  }
+
+  .count-label {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  .count-sep {
+    font-family: 'Cinzel', serif;
+    font-size: 32px;
+    color: rgba(74, 240, 255, 0.3);
+    margin-bottom: 20px;
+    line-height: 1;
+  }
+
+  /* ── BOTTOM SECTION ── */
+  .bottom-section {
+    width: 100%;
+    max-width: 900px;
+    padding-bottom: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    animation: fadeSlideUp 2s ease forwards;
+    opacity: 0;
+    animation-delay: 1.6s;
+  }
+
+  .tagline-row {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .tag-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  .tag-dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--bolt-gold);
+    flex-shrink: 0;
+  }
+
+  /* ── CTA BUTTON ── */
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    background: transparent;
+    border: 1px solid rgba(232, 200, 74, 0.5);
+    color: var(--bolt-gold);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    padding: 18px 50px;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+  }
+
+  .cta-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(232, 200, 74, 0.08) 0%, rgba(74, 240, 255, 0.05) 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .cta-btn::after {
+    content: '';
+    position: absolute;
+    left: 0; bottom: 0;
+    width: 0; height: 1px;
+    background: var(--bolt-gold);
+    transition: width 0.4s ease;
+  }
+
+  .cta-btn:hover {
+    border-color: rgba(232, 200, 74, 0.9);
+    color: #fff;
+    box-shadow: 0 0 40px rgba(232, 200, 74, 0.25), inset 0 0 40px rgba(232, 200, 74, 0.05);
+    letter-spacing: 0.45em;
+  }
+
+  .cta-btn:hover::before { opacity: 1; }
+  .cta-btn:hover::after { width: 100%; }
+
+  .cta-icon {
+    font-size: 18px;
+    transition: transform 0.3s ease;
+  }
+
+  .cta-btn:hover .cta-icon { transform: translateX(4px); }
+
+  /* ── FOOTER ── */
+  .footer-tag {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: rgba(106, 138, 170, 0.5);
+    text-transform: uppercase;
+    text-align: center;
+    padding-bottom: 24px;
+  }
+
+  /* ── LIGHTNING FLASH OVERLAY ── */
+  #flash {
+    position: fixed;
+    inset: 0;
+    background: rgba(180, 210, 255, 0.0);
+    pointer-events: none;
+    z-index: 100;
+    transition: background 0.05s;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeSlideDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 0.7; transform: translateY(0); }
+  }
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes boltFlicker {
+    0%, 100% { opacity: 1; }
+    20% { opacity: 0.2; }
+    40% { opacity: 1; }
+    60% { opacity: 0.4; }
+    80% { opacity: 1; }
+  }
+
+  @keyframes cloudDrift {
+    0% { transform: translateX(0px); }
+    50% { transform: translateX(-18px); }
+    100% { transform: translateX(0px); }
+  }
+
+  @keyframes firePulse {
+    0%, 100% { opacity: 0.9; transform: scale(1) translateY(0); }
+    50% { opacity: 0.6; transform: scale(1.08) translateY(-4px); }
+  }
+
+  @keyframes boltGlow {
+    0%, 100% { filter: drop-shadow(0 0 8px #e8c84a) drop-shadow(0 0 20px #4af0ff); }
+    50% { filter: drop-shadow(0 0 20px #fff) drop-shadow(0 0 50px #4af0ff) drop-shadow(0 0 80px #1a6fff); }
+  }
+
+  .cloud-layer-1 { animation: cloudDrift 22s ease-in-out infinite; }
+  .cloud-layer-2 { animation: cloudDrift 30s ease-in-out infinite reverse; }
+  .bolt-main { animation: boltGlow 2.5s ease-in-out infinite; }
+  .fire-1 { animation: firePulse 1.2s ease-in-out infinite; }
+  .fire-2 { animation: firePulse 0.9s ease-in-out infinite 0.3s; }
+  .fire-3 { animation: firePulse 1.5s ease-in-out infinite 0.6s; }
+
+  /* ── PARTICLES ── */
+  .particle-field {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .spark {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    border-radius: 50%;
+    background: var(--bolt-cyan);
+    animation: sparkFloat linear infinite;
+    opacity: 0;
+  }
+
+  @keyframes sparkFloat {
+    0% { transform: translateY(0) translateX(0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 0.5; }
+    100% { transform: translateY(-100vh) translateX(var(--drift)); opacity: 0; }
+  }
+
+  @media (max-width: 600px) {
+    .countdown { gap: 12px; }
+    .tagline-row { gap: 20px; }
+    .cta-btn { padding: 16px 36px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="flash"></div>
+
+<!-- Storm canvas background -->
+<canvas id="storm-canvas"></canvas>
+
+<!-- Floating sparks -->
+<div class="particle-field" id="sparks"></div>
+
+<div class="scene">
+  <header>
+    <span class="logo-mark">⚡ Thunder.ly</span>
+    <span class="nav-tag">Est. 2026 — Launching Soon</span>
+  </header>
+
+  <div class="hero">
+    <p class="hero-eyebrow">A new force is awakening</p>
+
+    <!-- ── THE TREE STRIKE SCENE ── -->
+    <div class="tree-scene">
+      <svg viewBox="0 0 900 480" xmlns="http://www.w3.org/2000/svg" role="img">
+        <title>Lightning striking a tree in a stormy night</title>
+        <defs>
+          <!-- Sky gradient -->
+          <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#010812"/>
+            <stop offset="35%" stop-color="#020d22"/>
+            <stop offset="70%" stop-color="#041630"/>
+            <stop offset="100%" stop-color="#051220"/>
+          </linearGradient>
+
+          <!-- Ground gradient -->
+          <linearGradient id="groundGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#050e1a"/>
+            <stop offset="100%" stop-color="#020810"/>
+          </linearGradient>
+
+          <!-- Bolt glow filter -->
+          <filter id="boltGlowF" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+
+          <!-- Strike glow -->
+          <filter id="strikeGlow" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+
+          <!-- Fire glow -->
+          <filter id="fireGlow" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+
+          <!-- Cloud glow -->
+          <filter id="cloudGlow" x="-10%" y="-10%" width="120%" height="120%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="18" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+
+          <!-- Ambient light at strike point -->
+          <radialGradient id="strikeLight" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#4af0ff" stop-opacity="0.3"/>
+            <stop offset="50%" stop-color="#1a6fff" stop-opacity="0.1"/>
+            <stop offset="100%" stop-color="#020d22" stop-opacity="0"/>
+          </radialGradient>
+
+          <!-- Ground glow -->
+          <radialGradient id="groundGlow" cx="50%" cy="0%" r="80%">
+            <stop offset="0%" stop-color="#e8c84a" stop-opacity="0.35"/>
+            <stop offset="100%" stop-color="#020810" stop-opacity="0"/>
+          </radialGradient>
+
+          <!-- Tree shadow -->
+          <radialGradient id="treeAmbient" cx="50%" cy="100%" r="60%">
+            <stop offset="0%" stop-color="#1a6fff" stop-opacity="0.25"/>
+            <stop offset="100%" stop-color="#020d22" stop-opacity="0"/>
+          </radialGradient>
+
+          <clipPath id="sceneClip">
+            <rect x="0" y="0" width="900" height="480"/>
+          </clipPath>
+        </defs>
+
+        <g clip-path="url(#sceneClip)">
+          <!-- Sky -->
+          <rect x="0" y="0" width="900" height="480" fill="url(#skyGrad)"/>
+
+          <!-- Distant mountain silhouette -->
+          <path d="M0 340 L60 280 L100 295 L160 240 L220 260 L290 195 L350 215 L420 165 L490 205 L560 175 L620 210 L680 188 L740 225 L800 200 L860 230 L900 215 L900 380 L0 380Z" fill="#030c1a" opacity="0.9"/>
+
+          <!-- ── CLOUDS layer 1 ── -->
+          <g class="cloud-layer-1" filter="url(#cloudGlow)" opacity="0.85">
+            <ellipse cx="200" cy="90" rx="160" ry="70" fill="#0a1e3a"/>
+            <ellipse cx="280" cy="70" rx="100" ry="55" fill="#0d2245"/>
+            <ellipse cx="130" cy="105" rx="90" ry="50" fill="#091a35"/>
+            <ellipse cx="320" cy="95" rx="80" ry="42" fill="#0b1f40"/>
+          </g>
+
+          <!-- ── CLOUDS layer 2 ── -->
+          <g class="cloud-layer-2" filter="url(#cloudGlow)" opacity="0.75">
+            <ellipse cx="700" cy="65" rx="180" ry="75" fill="#071628"/>
+            <ellipse cx="800" cy="48" rx="120" ry="58" fill="#0a1e38"/>
+            <ellipse cx="620" cy="80" rx="100" ry="48" fill="#081a30"/>
+            <ellipse cx="860" cy="90" rx="80" ry="45" fill="#071525"/>
+          </g>
+
+          <!-- ── CLOUDS center (storm mass) ── -->
+          <g filter="url(#cloudGlow)">
+            <ellipse cx="450" cy="60" rx="220" ry="90" fill="#0c2040" opacity="0.95"/>
+            <ellipse cx="390" cy="50" rx="160" ry="70" fill="#0e2448" opacity="0.9"/>
+            <ellipse cx="510" cy="45" rx="150" ry="65" fill="#0b1d3c" opacity="0.9"/>
+            <ellipse cx="450" cy="30" rx="130" ry="55" fill="#121e3a" opacity="0.95"/>
+            <!-- Dark underbelly -->
+            <ellipse cx="450" cy="110" rx="180" ry="50" fill="#060e1e" opacity="0.8"/>
+          </g>
+
+          <!-- ── AMBIENT STRIKE LIGHT ── -->
+          <ellipse cx="450" cy="260" rx="280" ry="220" fill="url(#strikeLight)" opacity="0.6"/>
+
+          <!-- ── DISTANT LIGHTNING (background) ── -->
+          <!-- Far bolt 1 -->
+          <path d="M180 85 L170 130 L185 125 L172 175" stroke="#8ab4ff" stroke-width="0.8" fill="none" opacity="0.25"/>
+          <!-- Far bolt 2 -->
+          <path d="M740 70 L752 115 L740 110 L755 160" stroke="#8ab4ff" stroke-width="0.6" fill="none" opacity="0.2"/>
+
+          <!-- ── MAIN BOLT — from storm cloud to tree ── -->
+          <!-- Glow halo layer -->
+          <path d="M452 40 L432 85 L458 80 L420 135 L448 130 L418 175 L445 170 L422 215 L438 208 L420 245" 
+                stroke="#4af0ff" stroke-width="18" fill="none" opacity="0.08" filter="url(#strikeGlow)"/>
+          <path d="M452 40 L432 85 L458 80 L420 135 L448 130 L418 175 L445 170 L422 215 L438 208 L420 245" 
+                stroke="#a0d0ff" stroke-width="10" fill="none" opacity="0.15" filter="url(#boltGlowF)"/>
+
+          <!-- Core bolt -->
+          <g class="bolt-main" filter="url(#boltGlowF)">
+            <path d="M452 40 L432 85 L458 80 L420 135 L448 130 L418 175 L445 170 L422 215 L438 208 L420 245" 
+                  stroke="#c8e8ff" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            <!-- Inner white core -->
+            <path d="M452 40 L432 85 L458 80 L420 135 L448 130 L418 175 L445 170 L422 215 L438 208 L420 245" 
+                  stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.9"/>
+            <!-- Branch 1 -->
+            <path d="M438 208 L415 228 L405 248" stroke="#a0d8ff" stroke-width="1.5" fill="none" opacity="0.7"/>
+            <!-- Branch 2 -->
+            <path d="M420 175 L400 190 L392 210" stroke="#a0d8ff" stroke-width="1" fill="none" opacity="0.5"/>
+            <!-- Branch 3 -->
+            <path d="M445 130 L462 148 L472 165" stroke="#a0d8ff" stroke-width="1" fill="none" opacity="0.5"/>
+          </g>
+
+          <!-- ── THE OAK TREE ── -->
+          <!-- Shadow beneath tree -->
+          <ellipse cx="420" cy="420" rx="120" ry="25" fill="#000000" opacity="0.5"/>
+
+          <!-- Ground lit area below strike -->
+          <ellipse cx="420" cy="430" rx="160" ry="40" fill="url(#groundGlow)"/>
+
+          <!-- Roots -->
+          <path d="M400 420 Q388 428 372 425 Q362 422 358 430" stroke="#1a1a0a" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <path d="M420 422 Q420 435 412 442 Q405 448 408 455" stroke="#1a1a0a" stroke-width="4" fill="none" stroke-linecap="round"/>
+          <path d="M440 420 Q455 430 468 426 Q478 422 482 428" stroke="#1a1a0a" stroke-width="5" fill="none" stroke-linecap="round"/>
+
+          <!-- Trunk split (lightning damaged) -->
+          <path d="M420 420 L418 370 L410 320 L415 275 L412 245" stroke="#1c1205" stroke-width="28" fill="none" stroke-linecap="round"/>
+          <path d="M420 420 L422 370 L430 320 L425 275 L428 245" stroke="#1c1205" stroke-width="18" fill="none" stroke-linecap="round"/>
+          <!-- Lighter bark highlight -->
+          <path d="M419 420 L417 370 L411 325 L414 280" stroke="#2a1a08" stroke-width="12" fill="none" stroke-linecap="round" opacity="0.5"/>
+          <!-- Split scar -->
+          <path d="M420 245 L418 270 L422 295 L416 320 L421 345 L417 370" stroke="#3a2010" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.9"/>
+
+          <!-- Char mark at strike point -->
+          <ellipse cx="420" cy="248" rx="18" ry="12" fill="#0a0502" opacity="0.9"/>
+          <ellipse cx="420" cy="248" rx="10" ry="7" fill="#1a0a04" opacity="0.7"/>
+
+          <!-- Main branches — left side -->
+          <path d="M415 300 Q385 275 360 265 Q340 258 318 262" stroke="#150e04" stroke-width="16" fill="none" stroke-linecap="round"/>
+          <path d="M318 262 Q302 256 290 248 Q278 240 268 244" stroke="#150e04" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <path d="M318 262 Q308 275 298 285 Q288 295 282 305" stroke="#150e04" stroke-width="9" fill="none" stroke-linecap="round"/>
+          <path d="M360 265 Q348 252 335 242 Q322 232 316 220" stroke="#150e04" stroke-width="8" fill="none" stroke-linecap="round"/>
+
+          <!-- Main branches — right side -->
+          <path d="M425 295 Q455 268 480 258 Q500 250 524 254" stroke="#150e04" stroke-width="16" fill="none" stroke-linecap="round"/>
+          <path d="M524 254 Q542 248 556 240 Q568 232 578 236" stroke="#150e04" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <path d="M524 254 Q532 270 540 280 Q548 290 554 302" stroke="#150e04" stroke-width="9" fill="none" stroke-linecap="round"/>
+          <path d="M480 258 Q492 244 505 234 Q518 224 522 210" stroke="#150e04" stroke-width="8" fill="none" stroke-linecap="round"/>
+
+          <!-- Twigs -->
+          <path d="M268 244 Q258 236 250 228" stroke="#120c04" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <path d="M268 244 Q264 256 258 265" stroke="#120c04" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <path d="M282 305 Q272 312 264 320" stroke="#120c04" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <path d="M316 220 Q308 212 300 205" stroke="#120c04" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <path d="M578 236 Q588 228 596 220" stroke="#120c04" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <path d="M578 236 Q582 248 586 260" stroke="#120c04" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <path d="M554 302 Q562 310 568 320" stroke="#120c04" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <path d="M522 210 Q528 202 534 195" stroke="#120c04" stroke-width="5" fill="none" stroke-linecap="round"/>
+
+          <!-- ── FOLIAGE (dark, silhouetted) ── -->
+          <!-- Left canopy -->
+          <ellipse cx="305" cy="252" rx="55" ry="42" fill="#080e04" opacity="0.95"/>
+          <ellipse cx="278" cy="268" rx="40" ry="32" fill="#060c03" opacity="0.95"/>
+          <ellipse cx="290" cy="230" rx="42" ry="34" fill="#070d04" opacity="0.9"/>
+          <ellipse cx="330" cy="225" rx="35" ry="28" fill="#080e04" opacity="0.9"/>
+          <ellipse cx="258" cy="248" rx="30" ry="25" fill="#050b02" opacity="0.9"/>
+
+          <!-- Right canopy -->
+          <ellipse cx="548" cy="248" rx="55" ry="42" fill="#080e04" opacity="0.95"/>
+          <ellipse cx="575" cy="264" rx="40" ry="32" fill="#060c03" opacity="0.95"/>
+          <ellipse cx="562" cy="228" rx="42" ry="34" fill="#070d04" opacity="0.9"/>
+          <ellipse cx="524" cy="222" rx="35" ry="28" fill="#080e04" opacity="0.9"/>
+          <ellipse cx="592" cy="245" rx="30" ry="25" fill="#050b02" opacity="0.9"/>
+
+          <!-- Top crown (damaged, sparser) -->
+          <ellipse cx="412" cy="225" rx="38" ry="28" fill="#080e04" opacity="0.85"/>
+          <ellipse cx="435" cy="215" rx="32" ry="24" fill="#070d04" opacity="0.8"/>
+          <ellipse cx="395" cy="210" rx="28" ry="22" fill="#060c04" opacity="0.7"/>
+
+          <!-- Blue glow on foliage from lightning -->
+          <ellipse cx="420" cy="248" rx="90" ry="70" fill="#1a4fff" opacity="0.06"/>
+
+          <!-- ── FIRE at strike point ── -->
+          <!-- Base ember glow -->
+          <ellipse cx="420" cy="250" rx="30" ry="15" fill="#e8800a" opacity="0.5" filter="url(#fireGlow)"/>
+
+          <!-- Flame 1 (center) -->
+          <g class="fire-1" filter="url(#fireGlow)">
+            <path d="M420 260 Q414 240 416 225 Q418 210 420 200 Q422 210 424 225 Q426 240 420 260Z" fill="#ff6a00" opacity="0.9"/>
+            <path d="M420 258 Q415 242 417 232 Q419 220 420 215 Q421 220 423 232 Q425 242 420 258Z" fill="#ffbb00" opacity="0.8"/>
+          </g>
+
+          <!-- Flame 2 (left) -->
+          <g class="fire-2" filter="url(#fireGlow)">
+            <path d="M412 258 Q406 242 408 228 Q410 215 412 208 Q414 215 414 228 Q416 242 412 258Z" fill="#ff4500" opacity="0.8"/>
+            <path d="M412 256 Q408 243 409 233 Q411 222 412 218 Q413 222 413 233 Q415 243 412 256Z" fill="#ffa020" opacity="0.6"/>
+          </g>
+
+          <!-- Flame 3 (right) -->
+          <g class="fire-3" filter="url(#fireGlow)">
+            <path d="M428 258 Q432 242 430 228 Q428 215 428 208 Q430 215 432 228 Q434 242 428 258Z" fill="#ff5200" opacity="0.75"/>
+            <path d="M428 256 Q431 244 430 234 Q429 222 428 218 Q430 222 432 234 Q434 244 428 256Z" fill="#ffb020" opacity="0.55"/>
+          </g>
+
+          <!-- Embers -->
+          <circle cx="408" cy="235" r="2" fill="#ff8800" opacity="0.9" class="fire-1"/>
+          <circle cx="432" cy="228" r="1.5" fill="#ffaa00" opacity="0.8" class="fire-2"/>
+          <circle cx="418" cy="218" r="1" fill="#ffcc00" opacity="0.7" class="fire-3"/>
+          <circle cx="404" cy="248" r="1.5" fill="#ff6600" opacity="0.6" class="fire-1"/>
+          <circle cx="438" cy="242" r="1.5" fill="#ff7700" opacity="0.6" class="fire-2"/>
+
+          <!-- ── RAIN ── -->
+          <!-- Generated rain streaks -->
+          <g opacity="0.18" stroke="#6090c8" stroke-width="0.7" stroke-linecap="round">
+            <line x1="50" y1="150" x2="45" y2="185"/>
+            <line x1="120" y1="130" x2="115" y2="165"/>
+            <line x1="200" y1="140" x2="195" y2="175"/>
+            <line x1="75" y1="200" x2="70" y2="235"/>
+            <line x1="160" y1="190" x2="155" y2="225"/>
+            <line x1="250" y1="155" x2="245" y2="190"/>
+            <line x1="310" y1="170" x2="305" y2="205"/>
+            <line x1="360" y1="145" x2="355" y2="180"/>
+            <line x1="510" y1="155" x2="505" y2="190"/>
+            <line x1="570" y1="170" x2="565" y2="205"/>
+            <line x1="630" y1="145" x2="625" y2="180"/>
+            <line x1="690" y1="160" x2="685" y2="195"/>
+            <line x1="750" y1="140" x2="745" y2="175"/>
+            <line x1="820" y1="155" x2="815" y2="190"/>
+            <line x1="880" y1="130" x2="875" y2="165"/>
+            <line x1="40" y1="270" x2="35" y2="305"/>
+            <line x1="100" y1="290" x2="95" y2="325"/>
+            <line x1="155" y1="260" x2="150" y2="295"/>
+            <line x1="220" y1="280" x2="215" y2="315"/>
+            <line x1="280" y1="265" x2="275" y2="300"/>
+            <line x1="590" y1="265" x2="585" y2="300"/>
+            <line x1="650" y1="280" x2="645" y2="315"/>
+            <line x1="710" y1="260" x2="705" y2="295"/>
+            <line x1="770" y1="275" x2="765" y2="310"/>
+            <line x1="840" y1="250" x2="835" y2="285"/>
+            <line x1="30" y1="370" x2="25" y2="405"/>
+            <line x1="90" y1="355" x2="85" y2="390"/>
+            <line x1="170" y1="370" x2="165" y2="405"/>
+            <line x1="240" y1="360" x2="235" y2="395"/>
+            <line x1="600" y1="360" x2="595" y2="395"/>
+            <line x1="670" y1="375" x2="665" y2="410"/>
+            <line x1="730" y1="355" x2="725" y2="390"/>
+            <line x1="790" y1="365" x2="785" y2="400"/>
+            <line x1="860" y1="370" x2="855" y2="405"/>
+          </g>
+
+          <!-- ── GROUND ── -->
+          <rect x="0" y="380" width="900" height="100" fill="url(#groundGrad)"/>
+          <!-- Ground hill -->
+          <path d="M0 390 Q200 370 420 375 Q640 380 900 368 L900 480 L0 480Z" fill="#030c18" opacity="0.9"/>
+          <!-- Ground puddle reflections -->
+          <ellipse cx="300" cy="408" rx="60" ry="6" fill="#0a2040" opacity="0.5"/>
+          <ellipse cx="600" cy="415" rx="50" ry="5" fill="#0a2040" opacity="0.4"/>
+          <!-- Lightning reflection in puddle -->
+          <ellipse cx="420" cy="410" rx="80" ry="8" fill="#1a4fff" opacity="0.2"/>
+
+          <!-- ── OVERLAY VIGNETTE ── -->
+          <radialGradient id="vignette" cx="50%" cy="50%" r="70%">
+            <stop offset="0%" stop-color="transparent"/>
+            <stop offset="100%" stop-color="#010810" stop-opacity="0.85"/>
+          </radialGradient>
+          <rect x="0" y="0" width="900" height="480" fill="url(#vignette)" opacity="0.7"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Title -->
+    <h1 class="hero-title">
+      <span class="thunder">Thunder<span class="dot-ly">.ly</span></span>
+    </h1>
+
+    <p class="hero-subtitle">
+      The <em>fastest</em> platform on the internet.<br>
+      Speed is not a feature — it is our obsession.
+    </p>
+
+    <div class="divider"></div>
+
+    <!-- Countdown -->
+    <div class="countdown-wrapper">
+      <p class="countdown-label">Launching in</p>
+      <div class="countdown">
+        <div class="count-block">
+          <span class="count-num" id="cd-days">00</span>
+          <span class="count-label">Days</span>
+        </div>
+        <span class="count-sep">:</span>
+        <div class="count-block">
+          <span class="count-num" id="cd-hours">00</span>
+          <span class="count-label">Hours</span>
+        </div>
+        <span class="count-sep">:</span>
+        <div class="count-block">
+          <span class="count-num" id="cd-mins">00</span>
+          <span class="count-label">Minutes</span>
+        </div>
+        <span class="count-sep">:</span>
+        <div class="count-block">
+          <span class="count-num" id="cd-secs">00</span>
+          <span class="count-label">Seconds</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Section -->
+  <div class="bottom-section">
+    <div class="tagline-row">
+      <span class="tag-item"><span class="tag-dot"></span>Lightning Speed</span>
+      <span class="tag-item"><span class="tag-dot"></span>Unstoppable Power</span>
+      <span class="tag-item"><span class="tag-dot"></span>Zero Compromise</span>
+    </div>
+
+    <a class="cta-btn"
+       href="https://wa.me/218918883918?text=I%20would%20like%20to%20inquire%20about%20Thunder.ly%20platform"
+       target="_blank" rel="noopener">
+      <span>Inquire via WhatsApp</span>
+      <span class="cta-icon">⚡</span>
+    </a>
+
+    <p class="footer-tag">Thunder.ly &nbsp;·&nbsp; Power Beyond Lightning &nbsp;·&nbsp; © 2026</p>
+  </div>
+</div>
+
+<script>
+/* ── STORM CANVAS ── */
+const canvas = document.getElementById('storm-canvas');
+const ctx = canvas.getContext('2d');
+let W, H;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// Rain system
+const drops = [];
+for (let i = 0; i < 220; i++) {
+  drops.push({
+    x: Math.random() * 2000 - 200,
+    y: Math.random() * H,
+    len: 12 + Math.random() * 18,
+    speed: 8 + Math.random() * 14,
+    opacity: 0.04 + Math.random() * 0.1
+  });
+}
+
+let flashAlpha = 0;
+let flashTimer = 0;
+let nextFlash = 3000 + Math.random() * 6000;
+let lastTime = 0;
+
+function drawRain(dt) {
+  ctx.clearRect(0, 0, W, H);
+
+  // Lightning flash
+  if (flashAlpha > 0) {
+    ctx.fillStyle = `rgba(180,220,255,${flashAlpha})`;
+    ctx.fillRect(0, 0, W, H);
+  }
+
+  // Rain
+  ctx.save();
+  drops.forEach(d => {
+    ctx.beginPath();
+    ctx.strokeStyle = `rgba(140,180,240,${d.opacity})`;
+    ctx.lineWidth = 0.7;
+    const angle = 0.06; // slight slant
+    ctx.moveTo(d.x, d.y);
+    ctx.lineTo(d.x - Math.sin(angle) * d.len, d.y + Math.cos(angle) * d.len);
+    ctx.stroke();
+    d.y += d.speed * (dt / 16);
+    d.x -= 0.5 * (dt / 16);
+    if (d.y > H + 20) { d.y = -30; d.x = Math.random() * (W + 200); }
+  });
+  ctx.restore();
+}
+
+function triggerFlash() {
+  flashAlpha = 0.18 + Math.random() * 0.15;
+  const flash = document.getElementById('flash');
+  flash.style.background = `rgba(180,220,255,${flashAlpha * 0.8})`;
+
+  const seq = [
+    () => { flashAlpha *= 0.3; flash.style.background = `rgba(180,220,255,${flashAlpha})`; },
+    () => { flashAlpha = 0.1 + Math.random() * 0.1; flash.style.background = `rgba(180,220,255,${flashAlpha})`; },
+    () => { flashAlpha *= 0.2; flash.style.background = 'rgba(180,220,255,0)'; },
+  ];
+  seq.forEach((fn, i) => setTimeout(fn, 80 + i * 90));
+  nextFlash = 4000 + Math.random() * 8000;
+}
+
+function loop(ts) {
+  const dt = lastTime ? ts - lastTime : 16;
+  lastTime = ts;
+
+  flashTimer += dt;
+  if (flashTimer >= nextFlash) { flashTimer = 0; triggerFlash(); }
+  if (flashAlpha > 0.001) flashAlpha *= 0.88; else flashAlpha = 0;
+
+  drawRain(dt);
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+/* ── SPARKS ── */
+const field = document.getElementById('sparks');
+for (let i = 0; i < 30; i++) {
+  const s = document.createElement('div');
+  s.className = 'spark';
+  const x = Math.random() * 100;
+  const dur = 6 + Math.random() * 12;
+  const delay = Math.random() * 12;
+  const size = 1 + Math.random() * 2;
+  const drift = (Math.random() - 0.5) * 80;
+  s.style.cssText = `
+    left:${x}%;
+    bottom:${Math.random() * 30}%;
+    width:${size}px;
+    height:${size}px;
+    --drift:${drift}px;
+    animation-duration:${dur}s;
+    animation-delay:${delay}s;
+    background: ${Math.random() > 0.5 ? '#4af0ff' : '#e8c84a'};
+  `;
+  field.appendChild(s);
+}
+
+/* ── COUNTDOWN ── */
+const target = new Date('2026-12-31T00:00:00');
+function updateCountdown() {
+  const now = new Date();
+  const diff = target - now;
+  if (diff <= 0) { return; }
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  const fmt = n => String(n).padStart(2, '0');
+  document.getElementById('cd-days').textContent = fmt(d);
+  document.getElementById('cd-hours').textContent = fmt(h);
+  document.getElementById('cd-mins').textContent = fmt(m);
+  document.getElementById('cd-secs').textContent = fmt(s);
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+</script>
+</body>
+</html>
