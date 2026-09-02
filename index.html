@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thunder.ly — Coming Soon</title>
+<title>Thunder.ly — Premium Domain For Sale</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
@@ -193,7 +193,7 @@
     animation-delay: 1.4s;
   }
 
-  /* ── COUNTDOWN ── */
+  /* ── DOMAIN INFO STRIP (was countdown) ── */
   .countdown-wrapper {
     animation: fadeSlideUp 1.8s ease forwards;
     opacity: 0;
@@ -224,7 +224,7 @@
 
   .count-num {
     font-family: 'Cinzel', serif;
-    font-size: clamp(28px, 5vw, 44px);
+    font-size: clamp(24px, 4vw, 36px);
     font-weight: 700;
     color: var(--bolt-white);
     line-height: 1;
@@ -459,7 +459,7 @@
   </header>
 
   <div class="hero">
-    <p class="hero-eyebrow">Domain for sale</p>
+    <p class="hero-eyebrow">Premium domain listing</p>
 
     <!-- ── THE TREE STRIKE SCENE ── -->
     <div class="tree-scene">
@@ -755,34 +755,29 @@
     </h1>
 
     <p class="hero-subtitle">
-      The <em>fastest</em> platform on the internet.<br>
-      Speed is not a feature — it is our obsession.
+      A <em>premium</em>, brandable domain name.<br>
+      Reserved for a bold idea — now available.
     </p>
 
     <div class="divider"></div>
 
-    <!-- Countdown -->
+    <!-- Domain details (replaces the old launch countdown) -->
     <div class="countdown-wrapper">
-      <p class="countdown-label">Launching in</p>
+      <p class="countdown-label">Domain Details</p>
       <div class="countdown">
         <div class="count-block">
-          <span class="count-num" id="cd-days">00</span>
-          <span class="count-label">Days</span>
+          <span class="count-num">9</span>
+          <span class="count-label">Characters</span>
         </div>
-        <span class="count-sep">:</span>
+        <span class="count-sep">·</span>
         <div class="count-block">
-          <span class="count-num" id="cd-hours">00</span>
-          <span class="count-label">Hours</span>
+          <span class="count-num">.LY</span>
+          <span class="count-label">Extension</span>
         </div>
-        <span class="count-sep">:</span>
+        <span class="count-sep">·</span>
         <div class="count-block">
-          <span class="count-num" id="cd-mins">00</span>
-          <span class="count-label">Minutes</span>
-        </div>
-        <span class="count-sep">:</span>
-        <div class="count-block">
-          <span class="count-num" id="cd-secs">00</span>
-          <span class="count-label">Seconds</span>
+          <span class="count-num">Now</span>
+          <span class="count-label">Available</span>
         </div>
       </div>
     </div>
@@ -791,19 +786,19 @@
   <!-- Bottom Section -->
   <div class="bottom-section">
     <div class="tagline-row">
-      <span class="tag-item"><span class="tag-dot"></span>Lightning Speed</span>
-      <span class="tag-item"><span class="tag-dot"></span>Unstoppable Power</span>
-      <span class="tag-item"><span class="tag-dot"></span>Zero Compromise</span>
+      <span class="tag-item"><span class="tag-dot"></span>Short & Memorable</span>
+      <span class="tag-item"><span class="tag-dot"></span>Brandable Name</span>
+      <span class="tag-item"><span class="tag-dot"></span>Instant Transfer</span>
     </div>
 
     <a class="cta-btn"
-       href="https://wa.me/218918883918?text=I%20would%20like%20to%20inquire%20about%20Thunder.ly%20platform"
+       href="https://wa.me/218918883918?text=I%20would%20like%20to%20inquire%20about%20buying%20the%20Thunder.ly%20domain"
        target="_blank" rel="noopener">
       <span>Inquire via WhatsApp</span>
       <span class="cta-icon">⚡</span>
     </a>
 
-    <p class="footer-tag">Thunder.ly &nbsp;·&nbsp; Power Beyond Lightning &nbsp;·&nbsp; © 2026</p>
+    <p class="footer-tag">Thunder.ly &nbsp;·&nbsp; Premium Domain Listing &nbsp;·&nbsp; © 2026</p>
   </div>
 </div>
 
@@ -912,25 +907,6 @@ for (let i = 0; i < 30; i++) {
   `;
   field.appendChild(s);
 }
-
-/* ── COUNTDOWN ── */
-const target = new Date('2026-12-31T00:00:00');
-function updateCountdown() {
-  const now = new Date();
-  const diff = target - now;
-  if (diff <= 0) { return; }
-  const d = Math.floor(diff / 86400000);
-  const h = Math.floor((diff % 86400000) / 3600000);
-  const m = Math.floor((diff % 3600000) / 60000);
-  const s = Math.floor((diff % 60000) / 1000);
-  const fmt = n => String(n).padStart(2, '0');
-  document.getElementById('cd-days').textContent = fmt(d);
-  document.getElementById('cd-hours').textContent = fmt(h);
-  document.getElementById('cd-mins').textContent = fmt(m);
-  document.getElementById('cd-secs').textContent = fmt(s);
-}
-updateCountdown();
-setInterval(updateCountdown, 1000);
 </script>
 </body>
 </html>
